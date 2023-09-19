@@ -1,0 +1,318 @@
+syntax = "proto3";
+
+package api.auth;
+
+option go_package = "game-config/api/auth;auth";
+
+import "api/common/common.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service Auth {
+    // 登陆，用sso code换取token
+    rpc GenerateTokenByCode (GenerateTokenByCodeRequest) returns (GenerateTokenByCodeResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/generate_token_by_code"
+            body: "*"
+        };
+    }
+
+    // 在mbm系统模糊搜索用户信息
+    rpc SearchUserMdmInfo (SearchUserMdmInfoRequest) returns (SearchUserMdmInfoResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/mdm/search"
+            body: "*"
+        };
+    }
+    
+    // 用户查看自己的权限
+    rpc Me (MeRequest) returns (MeResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/me"
+            body: "*"
+        };
+    };
+
+    // 拉取管理后台人员列表
+    rpc ListAdminUser (ListAdminUserRequest) returns (ListAdminUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/list"
+            body: "*"
+        };
+    };
+
+    // 管理后台新增人员, 无法编辑超管
+    rpc CreateAdminUser (CreateAdminUserRequest) returns (CreateAdminUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/create"
+            body: "*"
+        };
+    }
+
+     // 删除管理员，不能删除自己和超管
+     rpc DeleteAdminUser (DeleteAdminUserRequest) returns (DeleteAdminUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/delete"
+            body: "*"
+        };
+    }
+
+    // 封禁管理员
+    rpc BanAdminUser (BanAdminUserRequest) returns (BanAdminUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/ban"
+            body: "*"
+        };
+    }
+
+    // 解封管理员
+    rpc RestoreAdminUser (RestoreAdminUserRequest) returns (RestoreAdminUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/restore"
+            body: "*"
+        };
+    }
+
+    // 管理后台给管理员分配角色，不能更改超管角色
+    rpc UpdateAdminUserRole (UpdateAdminUserRoleRequest) returns (UpdateAdminUserRoleResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/user/assign_role"
+            body: "*"
+        };
+    }
+
+    // 管理后台角色列表
+    rpc SearchAdminRole (SearchAdminRoleRequest) returns (SearchAdminRoleResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/role/list"
+            body: "*"
+        };
+    };
+
+    // 管理后台角色的权限列表 仅用于查看角色的全部权限
+    rpc RetrieveAdminRoleResource (RetrieveAdminRoleResourceRequest) returns (RetrieveAdminRoleResourceResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/role/info"
+            body: "*"
+        };
+    };
+
+    // 管理后台新增/修改角色
+    rpc SaveAdminRole (SaveAdminRoleRequest) returns (SaveAdminRoleResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/role/save"
+            body: "*"
+        };
+    }
+
+    // 管理后台删除角色
+    rpc DeleteAdminRole (DeleteAdminRoleRequest) returns (DeleteAdminRoleResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/role/delete"
+            body: "*"
+        };
+    }
+
+     // 查询权限管理日志
+     rpc ListAuthLog (ListAuthLogRequest) returns (ListAuthLogResponse) {
+        option (google.api.http) = {
+            post: "/v1/auth/log/list"
+            body: "*"
+        };
+    }
+}
+
+/*
+    用户层面
+*/
+message GenerateTokenByCodeRequest{
+    string authCode = 1 [(validate.rules).string = {min_len:1}];
+    string redirectUrl = 2 [(validate.rules).string = {min_len:1, max_len:128}];
+}
+message GenerateTokenByCodeResponse{
+    string token = 1; // 管理后台token
+}
+
+message SearchUserMdmInfoRequest{
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    string key = 2 [(validate.rules).string = {min_len: 1, max_len: 32}];
+}
+message MdmUserInfo{
+    string hgId = 1;
+    string name = 2;
+    string nickname = 3;
+    string email = 4;
+}
+message SearchUserMdmInfoResponse{
+    repeated MdmUserInfo users = 2;
+}
+
+message MeRequest {
+    string token = 1 [(validate.rules).string = {min_len: 1}];
+}
+message MeResponse {
+    AdminUserAgg user = 2;
+}
+
+message ListAdminUserRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 pageSize = 2 [(validate.rules).uint32 = {gt: 0, lte: 200}];// 页面长度，必填
+    string page = 3 [(validate.rules).string = {min_len:1, max_len: 4}];// 页数，必填,为数字字符串
+}
+message ListAdminUserResponse {
+    uint32 totalCount = 1;// 总数,当且仅当pageNum==1时会返回
+    repeated AdminUserListAgg list = 2;// 管理用户聚合列表
+}
+
+message CreateAdminUserRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    AdminUser user = 2; // userId恒为0(已弃用)
+    string hgId = 3 [(validate.rules).string = {min_len:1}]; // 员工工号
+}
+message CreateAdminUserResponse {
+    uint32 id = 1; // 用户id
+}
+
+message DeleteAdminUserRequest{
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 userId = 2 [(validate.rules).uint32 = {gt: 0}]; // 管理员id
+}
+message DeleteAdminUserResponse{
+}
+
+message BanAdminUserRequest{
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 userId = 2 [(validate.rules).uint32 = {gt: 0}]; // 管理员id
+}
+message BanAdminUserResponse{
+}
+
+message RestoreAdminUserRequest{
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 userId = 2 [(validate.rules).uint32 = {gt: 0}]; // 管理员id
+}
+message RestoreAdminUserResponse{
+}
+
+message UpdateAdminUserRoleRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 userId = 2 [(validate.rules).uint32 = {gt: 0}]; // 管理员ID
+    repeated uint32 roleIds = 3 [(validate.rules).repeated = {items: {uint32: {gt: 0}}}]; // 角色ID
+}
+message UpdateAdminUserRoleResponse {
+}
+
+message AssignAdminRoleResourceRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 roleId = 2 [(validate.rules).uint32 = {gt: 0}]; // 角色ID
+    repeated string keys = 3 [(validate.rules).repeated = {max_items: 1, items: {string: {min_len: 1}}}]; // 资源key列表
+}
+message AssignAdminRoleResourceResponse {
+}
+
+message SearchAdminRoleRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    string key = 2 [(validate.rules).string = {max_len:32}];// 前缀搜索关键词
+    uint32 next = 3;  
+    int32 pageSize = 4 [(validate.rules).int32 = {gte: 0, lte: 200}];  // 单页数量
+}
+message SearchAdminRoleResponse {
+    repeated AdminRole list = 1;
+    uint32 next = 2; 
+    bool hasMore = 3; // 是否有下一页
+}
+
+message RetrieveAdminRoleResourceRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 roleId = 2 [(validate.rules).uint32 = {gt: 0}]; // 角色ID
+}
+message RetrieveAdminRoleResourceResponse {
+    AdminRole role = 1;
+}
+
+message SaveAdminRoleRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    AdminRole role = 2 [(validate.rules).message = {required: true}]; // id==0:创建 id>0:更新
+}
+message SaveAdminRoleResponse {
+}
+
+message DeleteAdminRoleRequest {
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    uint32 roleId = 2 [(validate.rules).uint32 = {gt: 0}]; // 角色ID
+}
+message DeleteAdminRoleResponse {
+}
+
+message AuthLogAgg{
+    AuthLog authLog = 1;
+    AdminUser operator = 2;
+}
+message ListAuthLogRequest{
+    api.common.Common common = 1 [(validate.rules).message = {required: true}];
+    string contentKey = 2 [(validate.rules).string = {max_len:32}];// 日志详情搜索关键词
+    string operatorKey = 3 [(validate.rules).string = {max_len:32}];// 管理员姓名/昵称搜索关键词
+    uint32 pageSize = 4 [(validate.rules).uint32 = {gt: 0, lte: 100}];// 页面长度，必填
+    uint32 next = 5;
+}
+message ListAuthLogResponse{
+    repeated AuthLogAgg list = 1;// 日志列表
+    uint32 next = 2; // 翻页token
+    bool hasMore = 3; // 存不存在下一页 
+}
+
+/**
+权限管理实体类
+ */
+ // 用户schema
+ message AdminUser{
+    uint32 id = 1; // 用户的id
+    string hgId = 2 [(validate.rules).string = {min_len:1, max_len:32}]; // 用户的鹰角id
+    string email = 3 [(validate.rules).string = {min_len:1, max_len:32}]; // 用户的ldap账号，为鹰角email
+    string nickName = 4 [(validate.rules).string = {min_len:1, max_len:32}]; // 昵称
+    string name = 5 [(validate.rules).string = {min_len:1, max_len:32}]; // 实名
+    uint32 createdAtTs = 6; // 用户创建时间
+    uint32 updatedAtTs = 7; // 用户更新时间
+    bool   skipAuth = 8; // 是否跳过认证
+}
+// 角色schema
+message AdminRole{
+    uint32 id = 1; // 角色id
+    string name = 2 [(validate.rules).string = {min_len:1, max_len:32}]; // 角色名称
+    string description = 3 [(validate.rules).string = {max_len:128}]; // 角色描述
+    repeated string resourceList = 4; // 角色的资源点列表
+    uint32 status = 5; // 角色状态，1为启用，2为已删除,创建时不需要传
+    uint32 appId = 6;// 角色所在的项目id，1为明日方舟，2为玩家社区,100为平台自测
+    uint32 createdAtTs = 7; // 角色的创建时间
+    uint32 updatedAtTs = 8; // 角色的更新时间
+}
+// 管理员信息聚合
+message AdminAppAgg{
+    uint32 appId = 1;
+    repeated AdminRole roles = 2;
+    repeated string resources = 3;
+    uint32 isSuper = 4; // 0为一般用户，1为超管
+    uint32 isBanned = 5; // 0为正常状态， 1为已封禁状态
+}
+
+message AdminUserAgg{
+    AdminUser user = 1;
+    repeated AdminAppAgg apps = 2;
+}
+
+message AdminUserListAgg{
+    AdminUser user = 1;
+    AdminAppAgg app = 2;
+}
+
+// 日志/流水
+message AuthLog{
+    uint32 id = 1; // 日志主键
+    uint32 operatorId = 2; // 操作者id
+    // 权限管理操作枚举值，1为添加用户，2为删除用户，3为添加角色标签，4为更新角色标签，5为删除角色标签，
+    // 6为激活用户，7为禁用用户，8为分配角色标签，9为删除用户的角色标签
+    uint32 operation = 3; 
+    uint32 createdAtTs = 4; // 日志创建时间
+    uint32 updatedAtTs = 5; // 日志更新时间
+    string content = 6; // 针对权限管理操作，按照模板生成的语义化日志信息，每个权限管理操作拥有一个日志详情模板
+}

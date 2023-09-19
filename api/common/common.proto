@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package api.common;
+
+option go_package = "game-config/api/common;common";
+
+message Common{
+    // 角色所在的项目id, 1~5为目前已知项目app id
+    uint32 appId = 1;
+}
+
+message DownloadResponse{
+    string fileName = 1;
+    int64  contentLength = 2;
+    bytes payload = 3;
+}
+

@@ -1,0 +1,64 @@
+server:
+  name: game-config
+  env: dev  # [dev|qa|pre|prod]
+  log:
+    only_log_validation_failure: true
+  http:
+    cors: 
+      allowed_origins:
+        - https://game-config-admin-test.hypergryph.net
+        - https://web-game-config-test.hypergryph.net
+    addr: 0.0.0.0:8080
+    timeout: 3s
+  grpc:
+    addr: 0.0.0.0:8081
+    timeout: 3s
+  trace:
+    on_off: false
+    endpoint: localhost
+    ratio: 1.0
+data:
+  database:
+    driver: mysql
+    source: root:123456@tcp(127.0.0.1:3306)/game_config?charset=utf8mb4&parseTime=True&loc=Local
+    max_idle_conn: 100
+    max_open_conn: 100
+    conn_max_lifetime: 10s
+    conn_max_idle_time: 10s
+  redis:
+    addr: 127.0.0.1:6379
+    password: '123456'
+    dial_timeout: 0.5s
+    read_timeout: 0.5s
+    write_timeout: 0.5s
+    pool_size: 100
+biz:
+  outer_env_list: ["prod"]
+  env_field_list: ["stable", "prod"]
+  batch_read_channel_list: ["all", "default", "official", "bilibili"]
+  channel_list: ["default", "official", "bilibili"]
+  batch_read_platform_list: ["all", "default", "Android", "iOS", "Windows", "PlayStation"]
+  platform_list: ["default", "Android", "iOS", "Windows", "PlayStation"]
+  version_pattern: '^[0-9]+\.[0-9]+-[A-z]{10}$'
+  network_config_tranfer_state_task:
+    switch: false
+    cron: "*/10 * * * * ?"
+    batch: 10
+    lock_expire: 300
+  remote_config_check_cache_by_db_task:
+    switch: true
+    cron: "*/10 * * * * ?"
+    batch: 10
+    lock_expire: 300
+  admin:
+    mdm: 
+      domain: https://amc-web-info-staging.hypergryph.net/api/mdm
+      app_id: HG_PLATFORM
+      secrete: xxxx
+    sso: 
+      domain: https://info-sso-staging.hypergryph.net
+      client_id: xxxx
+      client_secrete: xxxx
+    secretes:
+      3: "xxxx"
+      100: "xxxx"

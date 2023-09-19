@@ -1,0 +1,213 @@
+syntax = "proto3";
+
+package api.networkconfig;
+
+import "google/api/annotations.proto";
+
+option go_package = "game-config/api/networkconfig;networkconfig";
+
+// The greeting service definition.
+service NetworkConfig {
+
+    // 1. 获取network_config列表：GetNetworkConfigList
+    rpc GetNetworkConfigList (GetNetworkConfigListReq) returns (GetNetworkConfigListRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/get_network_config_list"
+              body: "*"
+          };
+    }
+  
+    // 2. 创建network_config：CreateNetworkConfig
+    rpc CreateNetworkConfig (CreateNetworkConfigReq) returns (CreateNetworkConfigRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/create_network_config"
+              body: "*"
+          };
+    }
+  
+    // 3. 删除network_config：DeleteNetworkConfig
+    rpc DeleteNetworkConfig (DeleteNetworkConfigReq) returns (DeleteNetworkConfigRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/delete_network_config"
+              body: "*"
+          };
+    }
+  
+    // 4. 修改network_config：UpdateNetworkConfig
+    rpc UpdateNetworkConfig (UpdateNetworkConfigReq) returns (UpdateNetworkConfigRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/update_network_config"
+              body: "*"
+          };
+    }
+  
+    // 5. 发布network_config：PublicNetworkConfig
+    rpc PublishNetworkConfig (PublishNetworkConfigReq) returns (PublishNetworkConfigRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/publish_network_config"
+              body: "*"
+          };
+    }
+  
+    // 6. 取消发布network_config：CancelPublishNetworkConfig
+    rpc CancelPublishNetworkConfig (CancelPublishNetworkConfigReq) returns (CancelPublishNetworkConfigRsp)  {
+          option (google.api.http) = {
+              post: "/admin/network_config/cancel_publish_network_config"
+              body: "*"
+          };
+    }
+  
+    // 7. C端公网获取单个network_config：GetNetworkConfig
+    rpc GetNetworkConfig (GetNetworkConfigReq) returns (GetNetworkConfigRsp)  {
+          option (google.api.http) = {
+              get: "/api/network_config/get_network_config/{appId}/{env}/{channel}/{platform}/{version}"
+          };
+    }
+  }
+  
+  // 1. 获取network_config列表：GetNetworkConfigList
+  message GetNetworkConfigListReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+  }
+  
+  message GetNetworkConfigListRsp {
+      repeated NetworkConfigDetail networkConfigs = 1; // network_config列表
+  }
+  
+  message NetworkConfigDetail {
+      uint32 appId = 1; // 游戏分配的id
+      string env = 2;  // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5;  // 完整版本号
+      uint32 state = 6;  // 配置状态，1:未发布，2:待发布，3:待提审，4:提审中，5:待上线，6:已上线，7:过期，（8:已删除，不会返回给前端）
+      uint64 auditStart = 7; //  提审开始时间，毫秒
+      uint64 auditEnd = 8; //  提审结束时间，毫秒
+      uint64 onlineStart = 9; // 上线开始时间，毫秒
+      string onlineConfig = 10; //  线上配置列表，json格式
+      string auditConfig = 11; // 提审配置，json格式
+      string operator = 12; // 操作人
+      uint64 updateTime = 13;  //  修改时间，毫秒
+  }
+  
+  // 远程配置状态，枚举值
+  enum NetworkConfigState {
+      NETWORK_CONFIG_UNKNOWN = 0; // 占位
+      NETWORK_CONFIG_NEVER_PUBLISHED = 1; // 未发布
+      NETWORK_CONFIG_WAIT_PUBLISH = 2; // 待发布
+      NETWORK_CONFIG_WAIT_AUDIT = 3; //  待提审
+      NETWORK_CONFIG_AUDITING = 4; //  提审中
+      NETWORK_CONFIG_WAIT_ONLINE = 5; // 待上线
+      NETWORK_CONFIG_ONLINE = 6;    // 上线
+      NETWORK_CONFIG_EXPIRE = 7;    // 过期
+      NETWORK_CONFIG_DELETED = 8;   // 已删除，不会返回给前端，仅为数据库记录用
+  } 
+  
+  // 2. 创建network_config：CreateNetworkConfig
+  message CreateNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      uint32 majorVersion = 5; // 大版本号
+      uint32 minorVersion = 6; // 小版本号
+      uint64 auditStart = 7; //  提审开始时间，毫秒
+      uint64 auditEnd = 8; //  提审结束时间，毫秒
+      uint64 onlineStart = 9; // 上线开始时间，毫秒
+      string onlineConfig = 10; //  线上配置列表，json格式
+      string auditConfig = 11; // 提审配置，json格式
+      string operator = 12; // 操作人
+  }
+  
+  message CreateNetworkConfigRsp {
+      NetworkConfigDetail networkConfig = 1; // 创建后的networkConfig
+  }
+  
+  // 3.删除network_config：DeleteNetworkConfig
+  message DeleteNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5; // 完整版本号
+      string operator = 6; // 操作人
+      uint64 updateTime = 7;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+  }
+  
+  message DeleteNetworkConfigRsp {
+  }
+  
+  // 4. 修改network_config：UpdateNetworkConfig
+  message UpdateNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5; // 完整版本号
+  
+      uint64 auditStart = 6; //  提审开始时间，毫秒，传0表示删除
+      uint64 auditEnd = 7; //  提审结束时间，毫秒，传0表示删除
+      uint64 onlineStart = 8; // 上线开始时间，毫秒
+      string onlineConfig = 9; //  线上配置列表，json格式
+      string auditConfig = 10; // 提审配置，json格式
+      string operator = 11; // 操作人
+      uint64 updateTime = 12;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+  }
+  
+  message UpdateNetworkConfigRsp {
+  }
+  
+  // 5. 发布network_config：PublishNetworkConfig
+  message PublishNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5; // 完整版本号
+      string operator = 6; // 操作人
+      uint64 updateTime = 7;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+  }
+  
+  message PublishNetworkConfigRsp {
+  }
+  
+  // 6. 取消发布network_config：CancelPublishNetworkConfig
+  message CancelPublishNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5; // 完整版本号
+      string operator = 6; // 操作人
+      uint64 updateTime = 7;  // 该条配置上次返回的修改时间，若从未返回过则无需填写
+  }
+  
+  message CancelPublishNetworkConfigRsp {
+  }
+  
+  // 7. C端公网获取单个network_config：GetNetworkConfig
+  message GetNetworkConfigReq {
+      uint32 appId = 1;  // 游戏分配的id
+      string env = 2;    // 环境
+      string channel = 3; // 渠道
+      string platform = 4; // 平台
+      string version = 5; // 本地的完整版本号
+  }
+  
+  message GetNetworkConfigRsp {
+      uint32 versionState = 1;  // 版本号状态，1:在线，2:过期，3:未上线
+      string configData = 2; // 配置信息列表，是json类型
+  }
+  
+  // 版本号状态
+  enum VersionState {
+      VERSION_UNKNOWN = 0; // 占位
+      VERSION_ONLINE = 1; // 在线状态，无需操作，返回在线配置
+      VERSION_EXPIRE = 2; // 过期状态，需换包，返回在线配置
+      VERSION_NOT_ONLINE = 3; // 未上线状态，无需操作，返回提审or在线配置
+  }
+
+

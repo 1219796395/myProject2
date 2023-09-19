@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package api.operationlog.remoteconfiglog;
+
+import "google/api/annotations.proto";
+
+option go_package = "game-config/api/operationlog/remoteconfiglog;remoteconfiglog";
+
+// The greeting service definition.
+service RemoteConfigLog {
+    // 1. 查询日志列表：GetLogList
+    rpc GetRemoteConfigLogList(GetRemoteConfigLogListReq)
+        returns (GetRemoteConfigLogListRsp) {
+        option (google.api.http) = {
+            post: "/admin/remote_config_log/get_remote_config_log_list"
+            body: "*"
+        };
+    }
+}
+
+message GetRemoteConfigLogListReq {
+    uint32 appid      = 1;
+    string env        = 2;
+    string channel    = 3;
+    string platform   = 4;
+    string configName = 5;
+    uint32 operation  = 6;
+    string operator = 7;
+    uint64 startTime = 8;  // 开始时间，单位：毫秒，闭区间, [startTime, endTime)
+    uint64 endTime   = 9;  // 结束时间，单位：毫秒，开区间，[startTime, endTime)
+}
+
+message GetRemoteConfigLogListRsp {
+    repeated RemoteConfigLogDetail logs = 1;
+}
+
+message RemoteConfigLogDetail {
+    uint32 appid      = 1;     // 游戏的业务id
+    string env        = 2;     // 环境名
+    string channel    = 3;     // 渠道
+    string platform   = 4;     // 平台
+    string configName = 5;     // 配置名
+    uint32 operation  = 6;     // 操作，1:创建，2:修改，3:删除，4:发布，5:取消发布
+    string operator = 7;       // 操作人
+    string updateBefore = 8;   // 修改前的数据，json格式
+    string updateAfter  = 9;   // 修改后的数据，json格式
+    uint64 createTime   = 10;  // 日志创建时间，单位：毫秒
+}
+
+// 日志操作枚举值
+enum LogOperation {
+    OPERATION_UNKNOWN        = 0;  // 占位
+    OPERATION_CREATE         = 1;  // 创建
+    OPERATION_UPDATE         = 2;  // 修改
+    OPERATION_DELETE         = 3;  // 删除
+    OPERATION_PUBLISH        = 4;  // 发布
+    OPERATION_CANCEL_PUBLISH = 5;  // 取消发布
+}

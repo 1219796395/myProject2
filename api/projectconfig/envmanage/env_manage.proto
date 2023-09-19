@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package api.projectconfig.envmanage;
+
+option go_package = "game-config/api/projectconfig/envmanage;envmanage";
+
+import "api/common/common.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// The greeting service definition.
+service EnvManage {
+    // 1. 获取环境列表：GetEnvList
+    rpc GetEnvList(GetEnvListReq) returns (GetEnvListRsp) {
+        option (google.api.http) = {
+            get: "/admin/env_manage/list/{common.appId}"
+        };
+    }
+
+    // 2. 创建环境：CreateEnv
+    rpc CreateEnv(CreateEnvReq) returns (CreateEnvRsp) {
+        option (google.api.http) = {
+            post: "/admin/env_manage/{common.appId}/{envField}/{envName}"
+            body: "*"
+        };
+    }
+
+    // 3. 删除环境：DeleteEnv
+    rpc DeleteEnv(DeleteEnvReq) returns (DeleteEnvRsp) {
+        option (google.api.http) = {
+            delete: "/admin/env_manage/{common.appId}/{envField}/{envName}"
+        };
+    }
+
+    // 4. 修改环境：UpdateEnv
+    rpc UpdateEnv(UpdateEnvReq) returns (UpdateEnvRsp) {
+        option (google.api.http) = {
+            put: "/admin/env_manage/{common.appId}/{envField}/{envName}"
+            body: "*"
+        };
+    }
+}
+
+// 获取环境列表
+message GetEnvListReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+}
+
+message GetEnvListRsp {
+    repeated Env envs = 1;
+}
+
+message Env {
+    uint32 appId  = 1;      // 游戏分配的id
+    string field  = 2;      // 环境域，仅限["stable", "prod"]
+    string name   = 3;      // 业务自定义环境名，平台预设["stable", "prod"]
+    string remark = 4;      // 备注
+    bool isPreset = 5;      // 是否是预设环境
+    string operator = 6;    // 操作人
+    uint64 updateTime = 7;  // 修改时间
+}
+
+// 创建环境
+message CreateEnvReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string envField          = 2;  // 环境域，仅限["stable", "prod"]
+    string envName           = 3;  // 业务自定义环境名，平台预设["stable", "prod"]
+    string remark            = 4;  // 备注
+}
+
+message CreateEnvRsp {
+}
+
+// 删除环境
+message DeleteEnvReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string envField          = 2;  // 环境域，仅限["stable", "prod"]
+    string envName           = 3;  // 业务自定义环境名，平台预设["stable", "prod"]
+    uint64 updateTime        = 4;  // 该环境上次返回的修改时间，若从未返回过则无需填写
+}
+
+message DeleteEnvRsp {
+}
+
+// 修改环境
+message UpdateEnvReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string envField          = 2;  // 环境域，仅限["stable", "prod"]
+    string envName           = 3;  // 业务自定义的旧环境名，平台预设["stable", "prod"]
+    string newEnvName        = 4;  // 业务自定义的新环境名，平台预设["stable", "prod"]
+    string remark            = 5;  // 备注
+    uint64 updateTime        = 6;  // 该环境上次返回的修改时间，若从未返回过则无需填写
+}
+
+message UpdateEnvRsp {
+}

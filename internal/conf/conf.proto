@@ -1,0 +1,117 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "config/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Client client = 3;
+  Biz  biz = 4;
+}
+
+message Server {
+  message HTTP {
+    message Cors {
+      repeated string allowed_origins = 1;
+    }
+    string network = 1;
+    string addr = 2;
+    string metric_addr = 3;
+    google.protobuf.Duration timeout = 4;
+    Cors cors = 5;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message Trace {
+    bool on_off = 1;
+    string endpoint = 2;
+    double ratio = 3;
+  }
+  message Log {
+    bool only_log_validation_failure = 1;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+  Trace trace = 3;
+  string name = 4;
+  string env = 5;
+  Log log = 6;
+}
+
+message Data {
+  message Database {
+    string driver = 1;
+    string source = 2;
+    int32 max_idle_conn = 3;
+    int32 max_open_conn = 4;
+    google.protobuf.Duration conn_max_lifetime = 5;
+    google.protobuf.Duration conn_max_idle_time = 6;
+  }
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    string password = 3;
+    int32 db = 4;
+    google.protobuf.Duration dial_timeout = 5;
+    google.protobuf.Duration read_timeout = 6;
+    google.protobuf.Duration write_timeout = 7;
+    uint32 pool_size = 8;
+  }
+  Database database = 1;
+  Redis redis = 2;
+}
+
+message Client {
+  message HTTP {
+    string endpoint = 1;
+    google.protobuf.Duration timeout = 2;
+  }
+  message GRPC {
+    string endpoint = 1;
+    google.protobuf.Duration timeout = 2;
+  }
+  map<string, HTTP> http_svc_list = 1;
+  map<string, GRPC> grpc_svc_list = 2;
+}
+
+message Biz {
+  repeated string outer_env_list = 1;  // 外网环境列表
+  repeated string env_field_list = 2;
+  repeated string channel_list = 3;    // 渠道列表
+  repeated string batch_read_channel_list = 4; // 批量读，渠道列表
+  repeated string platform_list = 5;   // 平台列表
+  repeated string batch_read_platform_list = 6; // 批量读，平台列表
+  string version_pattern = 7; // 版本号pattern
+  Task network_config_tranfer_state_task = 8;
+  Task remote_config_check_cache_by_db_task = 9;
+  Admin admin = 10;
+
+  message Task {
+    bool switch = 1;  // 定时器开关
+    string cron = 2;  // 定时器cron
+    uint32 batch = 3; // 定时器的批次大小
+    uint64 lock_expire = 4; // 定时器的分布式锁过期时间，单位：秒
+  }
+
+  message Admin {
+    message MDM{
+      string domain = 1;
+      string app_id = 2;
+      string secrete = 3;
+    }
+    message SSO{
+      string domain = 1;
+      string client_id = 2;
+      string client_secrete = 3;
+    }
+    MDM mdm = 1;
+    SSO sso = 2;
+    map<uint32, string> secretes = 3;
+} 
+}

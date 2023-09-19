@@ -1,0 +1,699 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: RemoteConfig API
+    description: The greeting service definition.
+    version: 0.0.1
+paths:
+    /admin/remote_config/cancel_publish/{common.appId}/{env}/{channel}/{platform}/{configName}:
+        put:
+            tags:
+                - RemoteConfig
+            description: 6. 取消发布远程配置：CancelPublishRemoteConfig
+            operationId: RemoteConfig_CancelPublishRemoteConfig
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CancelPublishRemoteConfigReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CancelPublishRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/create_remote_config:
+        post:
+            tags:
+                - RemoteConfig
+            description: 旧的创建远程配置：CreateRemoteConfig
+            operationId: RemoteConfig_CreateRemoteConfigV1
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateRemoteConfigV1Req'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/list/{common.appId}/{env}/{channel}/{platform}:
+        get:
+            tags:
+                - RemoteConfig
+            description: 1. 获取远程配置列表：GetRemoteConfigList
+            operationId: RemoteConfig_GetRemoteConfigList
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: common.appId
+                  in: query
+                  description: 角色所在的项目id, 1~5为目前已知项目app id
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: configName
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRemoteConfigListRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/publish/{common.appId}/{env}/{channel}/{platform}/{configName}:
+        put:
+            tags:
+                - RemoteConfig
+            description: 5. 发布远程配置：PublicRemoteConfig
+            operationId: RemoteConfig_PublishRemoteConfig
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PublishRemoteConfigReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PublishRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/publish_remote_config:
+        post:
+            tags:
+                - RemoteConfig
+            description: 旧的发布远程配置：PublicRemoteConfig
+            operationId: RemoteConfig_PublishRemoteConfigV1
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PublishRemoteConfigV1Req'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PublishRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/update_remote_config:
+        post:
+            tags:
+                - RemoteConfig
+            description: 旧的修改远程配置：UpdateRemoteConfig
+            operationId: RemoteConfig_UpdateRemoteConfigV1
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateRemoteConfigV1Req'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /admin/remote_config/{common.appId}/{env}/{channel}/{platform}/{configName}:
+        put:
+            tags:
+                - RemoteConfig
+            description: 4. 修改远程配置：UpdateRemoteConfig
+            operationId: RemoteConfig_UpdateRemoteConfig
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateRemoteConfigReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - RemoteConfig
+            description: 2. 创建远程配置：CreateRemoteConfig
+            operationId: RemoteConfig_CreateRemoteConfig
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateRemoteConfigReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - RemoteConfig
+            description: 3. 删除远程配置：DeleteRemoteConfig
+            operationId: RemoteConfig_DeleteRemoteConfig
+            parameters:
+                - name: common.appId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: common.appId
+                  in: query
+                  description: 角色所在的项目id, 1~5为目前已知项目app id
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: updateTime
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/remote_config/get_remote_config/{appid}/{env}/{channel}/{platform}/{configName}:
+        get:
+            tags:
+                - RemoteConfig
+            description: 旧C端公网获取单个远程配置：GetRemoteConfigV1
+            operationId: RemoteConfig_GetRemoteConfigV1
+            parameters:
+                - name: appid
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/remote_config/{appId}/{env}/{channel}/{platform}/{configName}:
+        get:
+            tags:
+                - RemoteConfig
+            description: 7. C端公网获取单个远程配置：GetRemoteConfig
+            operationId: RemoteConfig_GetRemoteConfig
+            parameters:
+                - name: appId
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: env
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: channel
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: platform
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: configName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRemoteConfigRsp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        CancelPublishRemoteConfigReq:
+            type: object
+            properties:
+                common:
+                    $ref: '#/components/schemas/Common'
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+            description: 6. 取消发布远程配置：CancelPublishRemoteConfig
+        CancelPublishRemoteConfigRsp:
+            type: object
+            properties: {}
+        Common:
+            type: object
+            properties:
+                appId:
+                    type: integer
+                    description: 角色所在的项目id, 1~5为目前已知项目app id
+                    format: uint32
+        CreateRemoteConfigReq:
+            type: object
+            properties:
+                common:
+                    $ref: '#/components/schemas/Common'
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                configData:
+                    type: string
+            description: 2. 创建远程配置：CreateRemoteConfig
+        CreateRemoteConfigRsp:
+            type: object
+            properties: {}
+        CreateRemoteConfigV1Req:
+            type: object
+            properties:
+                appid:
+                    type: integer
+                    format: uint32
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                configData:
+                    type: string
+                operator:
+                    type: string
+        DeleteRemoteConfigRsp:
+            type: object
+            properties: {}
+        GetRemoteConfigListRsp:
+            type: object
+            properties:
+                remoteConfigs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RemoteConfigDetail'
+        GetRemoteConfigRsp:
+            type: object
+            properties:
+                configData:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        PublishRemoteConfigReq:
+            type: object
+            properties:
+                common:
+                    $ref: '#/components/schemas/Common'
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+            description: 5. 发布远程配置：PublishRemoteConfig
+        PublishRemoteConfigRsp:
+            type: object
+            properties: {}
+        PublishRemoteConfigV1Req:
+            type: object
+            properties:
+                appid:
+                    type: integer
+                    format: uint32
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                operator:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+        RemoteConfigDetail:
+            type: object
+            properties:
+                appId:
+                    type: integer
+                    format: uint32
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                name:
+                    type: string
+                state:
+                    type: integer
+                    format: uint32
+                data:
+                    type: string
+                modifyData:
+                    type: string
+                operator:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateRemoteConfigReq:
+            type: object
+            properties:
+                common:
+                    $ref: '#/components/schemas/Common'
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                configData:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+            description: 4. 修改远程配置：UpdateRemoteConfig
+        UpdateRemoteConfigRsp:
+            type: object
+            properties: {}
+        UpdateRemoteConfigV1Req:
+            type: object
+            properties:
+                appid:
+                    type: integer
+                    format: uint32
+                env:
+                    type: string
+                channel:
+                    type: string
+                platform:
+                    type: string
+                configName:
+                    type: string
+                configData:
+                    type: string
+                operator:
+                    type: string
+                updateTime:
+                    type: integer
+                    format: uint64
+tags:
+    - name: RemoteConfig
