@@ -1,7 +1,7 @@
 package data
 
 import (
-	"game-config/internal/conf"
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/redis/extra/redisotel/v8"

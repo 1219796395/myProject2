@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"context"
-	"game-config/internal/conf"
+
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"net"
 	"strings"

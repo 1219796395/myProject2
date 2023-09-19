@@ -6,12 +6,13 @@ import (
 	"encoding/hex"
 	stderr "errors"
 	"fmt"
-	"game-config/internal/biz/bo"
-	"game-config/internal/conf"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/1219796395/myProject2/internal/biz/bo"
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

@@ -2,9 +2,10 @@ package data
 
 import (
 	"context"
-	"game-config/internal/biz"
-	"game-config/internal/biz/bo"
 	"time"
+
+	"github.com/1219796395/myProject2/internal/biz"
+	"github.com/1219796395/myProject2/internal/biz/bo"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/jinzhu/copier"

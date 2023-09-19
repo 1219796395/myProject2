@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
-	"game-config/api/errorcode"
-	pb "game-config/api/operationlog/remoteconfiglog"
-	"game-config/internal/biz"
+
+	"github.com/1219796395/myProject2/api/errorcode"
+	pb "github.com/1219796395/myProject2/api/operationlog/remoteconfiglog"
+	"github.com/1219796395/myProject2/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"

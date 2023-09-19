@@ -4,7 +4,7 @@ package api.operationlog.remoteconfiglog;
 
 import "google/api/annotations.proto";
 
-option go_package = "game-config/api/operationlog/remoteconfiglog;remoteconfiglog";
+option go_package = "github.com/1219796395/myProject2/api/operationlog/remoteconfiglog;remoteconfiglog";
 
 // The greeting service definition.
 service RemoteConfigLog {

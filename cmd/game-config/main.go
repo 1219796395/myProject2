@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"game-config/internal/conf"
-	"game-config/internal/server"
-	"game-config/internal/task"
 	"os"
 	"strings"
+
+	"github.com/1219796395/myProject2/internal/conf"
+	"github.com/1219796395/myProject2/internal/server"
+	"github.com/1219796395/myProject2/internal/task"
 
 	kratosLogrus "github.com/go-kratos/kratos/contrib/log/logrus/v2"
 	"github.com/go-kratos/kratos/v2"

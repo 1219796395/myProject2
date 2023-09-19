@@ -3,7 +3,7 @@ package biz
 import (
 	"context"
 
-	"game-config/internal/biz/bo"
+	"github.com/1219796395/myProject2/internal/biz/bo"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

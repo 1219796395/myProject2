@@ -3,10 +3,11 @@ package data
 import (
 	"context"
 	"fmt"
-	"game-config/api/errorcode"
-	"game-config/internal/biz"
 	"strings"
 	"time"
+
+	"github.com/1219796395/myProject2/api/errorcode"
+	"github.com/1219796395/myProject2/internal/biz"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/patrickmn/go-cache"

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.projectconfig.envmanage;
 
-option go_package = "game-config/api/projectconfig/envmanage;envmanage";
+option go_package = "github.com/1219796395/myProject2/api/projectconfig/envmanage;envmanage";
 
 import "api/common/common.proto";
 import "google/api/annotations.proto";

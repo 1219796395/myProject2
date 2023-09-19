@@ -7,14 +7,14 @@
 package main
 
 import (
-	"game-config/internal/biz"
-	"game-config/internal/client"
-	"game-config/internal/conf"
-	"game-config/internal/data"
-	"game-config/internal/middleware"
-	"game-config/internal/server"
-	"game-config/internal/service"
-	"game-config/internal/task"
+	"github.com/1219796395/myProject2/internal/biz"
+	"github.com/1219796395/myProject2/internal/client"
+	"github.com/1219796395/myProject2/internal/conf"
+	"github.com/1219796395/myProject2/internal/data"
+	"github.com/1219796395/myProject2/internal/middleware"
+	"github.com/1219796395/myProject2/internal/server"
+	"github.com/1219796395/myProject2/internal/service"
+	"github.com/1219796395/myProject2/internal/task"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )

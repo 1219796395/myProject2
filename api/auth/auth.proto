@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.auth;
 
-option go_package = "game-config/api/auth;auth";
+option go_package = "github.com/1219796395/myProject2/api/auth;auth";
 
 import "api/common/common.proto";
 import "google/api/annotations.proto";

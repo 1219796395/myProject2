@@ -1,8 +1,9 @@
 package server
 
 import (
-	"game-config/internal/conf"
 	"os"
+
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"go.opentelemetry.io/otel"

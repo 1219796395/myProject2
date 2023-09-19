@@ -3,15 +3,16 @@ package service
 import (
 	"context"
 	"fmt"
-	pb "game-config/api/auth"
-	errorPb "game-config/api/errorcode"
-	"game-config/internal/biz"
-	"game-config/internal/biz/bo"
-	"game-config/internal/client"
-	"game-config/internal/conf"
 	"strconv"
 
-	"game-config/internal/middleware"
+	pb "github.com/1219796395/myProject2/api/auth"
+	errorPb "github.com/1219796395/myProject2/api/errorcode"
+	"github.com/1219796395/myProject2/internal/biz"
+	"github.com/1219796395/myProject2/internal/biz/bo"
+	"github.com/1219796395/myProject2/internal/client"
+	"github.com/1219796395/myProject2/internal/conf"
+
+	"github.com/1219796395/myProject2/internal/middleware"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"

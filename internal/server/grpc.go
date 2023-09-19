@@ -1,12 +1,12 @@
 package server
 
 import (
-	pb3 "game-config/api/networkconfig"
-	pb2 "game-config/api/operationlog/remoteconfiglog"
-	pb1 "game-config/api/projectconfig/envmanage"
-	pb "game-config/api/remoteconfig"
-	"game-config/internal/conf"
-	"game-config/internal/service"
+	pb3 "github.com/1219796395/myProject2/api/networkconfig"
+	pb2 "github.com/1219796395/myProject2/api/operationlog/remoteconfiglog"
+	pb1 "github.com/1219796395/myProject2/api/projectconfig/envmanage"
+	pb "github.com/1219796395/myProject2/api/remoteconfig"
+	"github.com/1219796395/myProject2/internal/conf"
+	"github.com/1219796395/myProject2/internal/service"
 
 	"github.com/go-kratos/kratos/contrib/metrics/prometheus/v2"
 	"github.com/go-kratos/kratos/v2/log"

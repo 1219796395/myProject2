@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.errorcode;
 
-option go_package = "game-config/api/errorcode;errorcode";
+option go_package = "github.com/1219796395/myProject2/api/errorcode;errorcode";
 
 import "errors/errors.proto";
 

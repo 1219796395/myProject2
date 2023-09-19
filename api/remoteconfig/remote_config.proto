@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.remoteconfig;
 
-option go_package = "game-config/api/remoteconfig;remoteconfig";
+option go_package = "github.com/1219796395/myProject2/api/remoteconfig;remoteconfig";
 
 import "google/api/annotations.proto";
 import "api/common/common.proto";

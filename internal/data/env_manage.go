@@ -2,10 +2,11 @@ package data
 
 import (
 	"context"
-	"game-config/api/errorcode"
-	"game-config/internal/biz"
-	"game-config/internal/conf"
 	"time"
+
+	"github.com/1219796395/myProject2/api/errorcode"
+	"github.com/1219796395/myProject2/internal/biz"
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-sql-driver/mysql"

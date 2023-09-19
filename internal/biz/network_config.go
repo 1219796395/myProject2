@@ -3,8 +3,6 @@ package biz
 import (
 	"context"
 	"fmt"
-	"game-config/api/errorcode"
-	"game-config/internal/conf"
 	"math/rand"
 	"regexp"
 	"sort"
@@ -12,6 +10,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/1219796395/myProject2/api/errorcode"
+	"github.com/1219796395/myProject2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

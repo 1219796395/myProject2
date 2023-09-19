@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"game-config/api/common"
-	"game-config/api/errorcode"
-	pb "game-config/api/remoteconfig"
-	"game-config/internal/biz"
-	"game-config/internal/conf"
-	"game-config/internal/middleware"
+	"github.com/1219796395/myProject2/api/common"
+	"github.com/1219796395/myProject2/api/errorcode"
+	pb "github.com/1219796395/myProject2/api/remoteconfig"
+	"github.com/1219796395/myProject2/internal/biz"
+	"github.com/1219796395/myProject2/internal/conf"
+	"github.com/1219796395/myProject2/internal/middleware"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"

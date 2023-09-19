@@ -2,8 +2,9 @@ package biz
 
 import (
 	"context"
-	"game-config/api/errorcode"
 	"time"
+
+	"github.com/1219796395/myProject2/api/errorcode"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

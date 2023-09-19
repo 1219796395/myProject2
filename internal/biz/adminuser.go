@@ -2,9 +2,10 @@ package biz
 
 import (
 	"context"
-	"game-config/internal/biz/bo"
-	"game-config/internal/conf"
-	"game-config/tool"
+
+	"github.com/1219796395/myProject2/internal/biz/bo"
+	"github.com/1219796395/myProject2/internal/conf"
+	"github.com/1219796395/myProject2/tool"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

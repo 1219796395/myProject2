@@ -1,4 +1,4 @@
-module game-config
+module github.com/1219796395/myProject2
 
 go 1.17
 

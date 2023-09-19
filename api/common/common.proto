@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.common;
 
-option go_package = "game-config/api/common;common";
+option go_package = "github.com/1219796395/myProject2/api/common;common";
 
 message Common{
     // 角色所在的项目id, 1~5为目前已知项目app id
