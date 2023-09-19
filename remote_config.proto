@@ -1,0 +1,253 @@
+syntax = "proto3";
+
+package api.remoteconfig;
+
+option go_package = "game-config/api/remoteconfig;remoteconfig";
+
+import "google/api/annotations.proto";
+import "api/common/common.proto";
+import "validate/validate.proto";
+
+// The greeting service definition.
+service RemoteConfig {
+    // 1. 获取远程配置列表：GetRemoteConfigList
+    rpc GetRemoteConfigList(GetRemoteConfigListReq) returns (GetRemoteConfigListRsp) {
+        option (google.api.http) = {
+            get: "/admin/remote_config/list/{common.appId}/{env}/{channel}/{platform}"
+        };
+    }
+
+    // 2. 创建远程配置：CreateRemoteConfig
+    rpc CreateRemoteConfig(CreateRemoteConfigReq) returns (CreateRemoteConfigRsp) {
+        option (google.api.http) = {
+            post: "/admin/remote_config/{common.appId}/{env}/{channel}/{platform}/{configName}"
+            body: "*"
+        };
+    }
+
+    // 旧的创建远程配置：CreateRemoteConfig
+    rpc CreateRemoteConfigV1(CreateRemoteConfigV1Req) returns (CreateRemoteConfigRsp) {
+        option (google.api.http) = {
+            post: "/admin/remote_config/create_remote_config"
+            body: "*"
+        };
+    }
+
+    // 3. 删除远程配置：DeleteRemoteConfig
+    rpc DeleteRemoteConfig(DeleteRemoteConfigReq) returns (DeleteRemoteConfigRsp) {
+        option (google.api.http) = {
+            delete: "/admin/remote_config/{common.appId}/{env}/{channel}/{platform}/{configName}"
+        };
+    }
+
+    // 4. 修改远程配置：UpdateRemoteConfig
+    rpc UpdateRemoteConfig(UpdateRemoteConfigReq) returns (UpdateRemoteConfigRsp) {
+        option (google.api.http) = {
+            put: "/admin/remote_config/{common.appId}/{env}/{channel}/{platform}/{configName}"
+            body: "*"
+        };
+    }
+
+    // 旧的修改远程配置：UpdateRemoteConfig
+    rpc UpdateRemoteConfigV1(UpdateRemoteConfigV1Req) returns (UpdateRemoteConfigRsp) {
+        option (google.api.http) = {
+            post: "/admin/remote_config/update_remote_config"
+            body: "*"
+        };
+    }
+
+    // 5. 发布远程配置：PublicRemoteConfig
+    rpc PublishRemoteConfig(PublishRemoteConfigReq) returns (PublishRemoteConfigRsp) {
+        option (google.api.http) = {
+            put: "/admin/remote_config/publish/{common.appId}/{env}/{channel}/{platform}/{configName}"
+            body: "*"
+        };
+    }
+
+    // 旧的发布远程配置：PublicRemoteConfig
+    rpc PublishRemoteConfigV1(PublishRemoteConfigV1Req) returns (PublishRemoteConfigRsp) {
+        option (google.api.http) = {
+            post: "/admin/remote_config/publish_remote_config"
+            body: "*"
+        };
+    }
+
+    // 6. 取消发布远程配置：CancelPublishRemoteConfig
+    rpc CancelPublishRemoteConfig(CancelPublishRemoteConfigReq) returns (CancelPublishRemoteConfigRsp) {
+        option (google.api.http) = {
+            put: "/admin/remote_config/cancel_publish/{common.appId}/{env}/{channel}/{platform}/{configName}"
+            body: "*"
+        };
+    }
+
+    // 7. C端公网获取单个远程配置：GetRemoteConfig
+    rpc GetRemoteConfig(GetRemoteConfigReq) returns (GetRemoteConfigRsp) {
+        option (google.api.http) = {
+            get: "/api/remote_config/{appId}/{env}/{channel}/{platform}/{configName}"
+        };
+    }
+
+    // 旧C端公网获取单个远程配置：GetRemoteConfigV1
+    rpc GetRemoteConfigV1(GetRemoteConfigV1Req) returns (GetRemoteConfigRsp) {
+        option (google.api.http) = {
+            get: "/api/remote_config/get_remote_config/{appid}/{env}/{channel}/{platform}/{configName}"
+        };
+    }
+}
+
+// 1. 获取远程配置列表：GetRemoteConfigList
+message GetRemoteConfigListReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+}
+
+message GetRemoteConfigListRsp {
+    repeated RemoteConfigDetail remoteConfigs = 1;  // 远程配置列表
+}
+
+message RemoteConfigDetail {
+    uint32 appId          = 1;   // 游戏分配的id
+    string env            = 2;   // 环境
+    string channel        = 3;   // 渠道
+    string platform       = 4;   // 平台
+    string name           = 5;   // 配置名
+    uint32 state          = 6;   // 配置状态，1:未发布，2:待发布，3：已上线，(4:已删除，不暴露给前端)
+    string data           = 7;   // 在线配置信息，json格式
+    string modify_data    = 8;   // 草稿配置信息，json格式
+    int32 notDistChannel  = 9;   // 不区分渠道，0表示区分，1表示不区分
+    int32 notDistPlatform = 10;  // 不区分平台，0表示区分，1表示不区分
+    string operator = 11;        // 操作人
+    uint64 updateTime = 12;      //  修改时间
+}
+
+// 远程配置状态，枚举值
+enum RemoteConfigState {
+    REMOTE_CONFIG_UNKNOWN         = 0;  // 占位
+    REMOTE_CONFIG_NEVER_PUBLISHED = 1;  // 未发布
+    REMOTE_CONFIG_WAIT_PUBLISH    = 2;  // 待发布
+    REMOTE_CONFIG_ONLINE          = 3;  // 已上线
+    REMOTE_CONFIG_DELETED         = 4;  // 已删除，不会返回给前端，仅为数据库记录用
+}
+
+// 2. 创建远程配置：CreateRemoteConfig
+message CreateRemoteConfigReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+    string configData        = 6;  // 配置信息，json格式
+    int32 notDistChannel     = 7;  // 不区分渠道，0表示区分，1表示不区分
+    int32 notDistPlatform    = 8;  // 不区分平台，0表示区分，1表示不区分
+}
+
+message CreateRemoteConfigV1Req {
+    uint32 appid      = 1;  // 游戏分配的id
+    string env        = 2;  // 环境
+    string channel    = 3;  // 渠道
+    string platform   = 4;  // 平台
+    string configName = 5;  // 配置名
+    string configData = 6;  // 配置信息，json格式
+    string operator = 7;    // 操作人
+}
+
+message CreateRemoteConfigRsp {
+}
+
+// 3.删除远程配置：DeleteRemoteConfig
+message DeleteRemoteConfigReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+    uint64 updateTime        = 6;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message DeleteRemoteConfigRsp {
+}
+
+// 4. 修改远程配置：UpdateRemoteConfig
+message UpdateRemoteConfigReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+    string configData        = 6;  // 配置信息
+    uint64 updateTime        = 7;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message UpdateRemoteConfigV1Req {
+    uint32 appid      = 1;  // 游戏分配的id
+    string env        = 2;  // 环境
+    string channel    = 3;  // 渠道
+    string platform   = 4;  // 平台
+    string configName = 5;  // 配置名
+    string configData = 6;  // 配置信息
+    string operator = 7;    // 操作人
+    uint64 updateTime = 8;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message UpdateRemoteConfigRsp {
+}
+
+// 5. 发布远程配置：PublishRemoteConfig
+message PublishRemoteConfigReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+    uint64 updateTime        = 6;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message PublishRemoteConfigV1Req {
+    uint32 appid      = 1;  // 游戏分配的id
+    string env        = 2;  // 环境
+    string channel    = 3;  // 渠道
+    string platform   = 4;  // 平台
+    string configName = 5;  // 配置名
+    string operator = 6;    // 操作人
+    uint64 updateTime = 7;  //  该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message PublishRemoteConfigRsp {
+}
+
+// 6. 取消发布远程配置：CancelPublishRemoteConfig
+message CancelPublishRemoteConfigReq {
+    api.common.Common common = 1 [(validate.rules).message = { required: true }];
+    string env               = 2;  // 环境
+    string channel           = 3;  // 渠道
+    string platform          = 4;  // 平台
+    string configName        = 5;  // 配置名
+    uint64 updateTime        = 6;  // 该条配置上次返回的修改时间，若从未返回过则无需填写
+}
+
+message CancelPublishRemoteConfigRsp {
+}
+
+// 7. C端公网获取单个远程配置：GetRemoteConfig
+message GetRemoteConfigReq {
+    uint32 appId      = 1;  // 游戏分配的id
+    string env        = 2;  // 环境
+    string channel    = 3;  // 渠道
+    string platform   = 4;  // 平台
+    string configName = 5;  // 配置名
+}
+
+message GetRemoteConfigV1Req {
+    uint32 appid      = 1;  // 游戏分配的id
+    string env        = 2;  // 环境
+    string channel    = 3;  // 渠道
+    string platform   = 4;  // 平台
+    string configName = 5;  // 配置名
+}
+
+message GetRemoteConfigRsp {
+    string configData = 1;  // 配置信息，默认json格式，终端自行反序列化
+}
