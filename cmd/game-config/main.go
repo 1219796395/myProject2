@@ -64,6 +64,8 @@ func main() {
 	}
 	defer cleanup()
 
+	fmt.Printf("testest")
+
 	// start and wait for stop signal
 	if err := app.Run(); err != nil {
 		panic(err)
@@ -71,8 +73,6 @@ func main() {
 }
 
 func initLogger(env string) log.Logger {
-	// get env var
-	// get LOG_DIR
 	logDir := os.Getenv("LOG_DIR")
 	if len(logDir) == 0 {
 		if env == "dev" {
