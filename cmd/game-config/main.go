@@ -48,11 +48,11 @@ func newApp(logger log.Logger, hs *server.HttpServer, ms *server.MetricsServer, 
 }
 
 func main() {
-	// get config
 	bc, err := conf.GetConf()
 	if err != nil || bc == nil {
-		panic(err)
 	}
+
+	fmt.Printf("testest")
 
 	// init logger
 	logger = initLogger(bc.Server.Env)
@@ -64,6 +64,9 @@ func main() {
 	}
 	defer cleanup()
 
+	fmt.Printf("testest")
+
+	// start and wait for stop signal
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
